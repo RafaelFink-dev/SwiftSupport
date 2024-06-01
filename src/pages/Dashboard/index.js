@@ -29,14 +29,14 @@ export default function Dashboard() {
 
     const getBackgroundColor = (status) => {
         switch (status) {
-          case 'Aberto':
-            return '#5CB85C';
-          case 'Progresso':
-            return '#D9534F';
-          case 'Atendido':
-            return '#999';
+            case 'Aberto':
+                return '#5CB85C';
+            case 'Progresso':
+                return '#D9534F';
+            case 'Atendido':
+                return '#999';
         }
-      };
+    };
 
     useEffect(() => {
 
@@ -66,7 +66,7 @@ export default function Dashboard() {
 
             const querySnapshot = await getDocs(q)
 
-            if (querySnapshot.docs.length === 0){
+            if (querySnapshot.docs.length === 0) {
                 toast.warn('Nenhum chamado encontrado com esse filtro!');
                 return;
             }
@@ -87,7 +87,7 @@ export default function Dashboard() {
 
     }
 
-    function handleClearFiltro(){
+    function handleClearFiltro() {
         setStatus('Todos');
         setReset(!reset);
         toast.success('Filtro resetado!');
@@ -191,21 +191,23 @@ export default function Dashboard() {
 
                                 </div>
 
-                                <div className='container'>
+                                <div className='container-filtros'>
                                     <h3>FILTROS:</h3>
 
                                     <div className='filtros'>
-                                        <label>Status</label>
-                                        <select value={status} onChange={handleOptionChange}>
-                                            <option value='Todos'>Todos</option>
-                                            <option value='Aberto'>Em Aberto</option>
-                                            <option value='Progresso'>Progresso</option>
-                                            <option value='Atendido'>Atendido</option>
-                                        </select>
-                                    </div>
+                                        <div className='filtros-cb'>
+                                            <label>Status</label>
+                                            <select value={status} onChange={handleOptionChange}>
+                                                <option value='Todos'>Todos</option>
+                                                <option value='Aberto'>Em Aberto</option>
+                                                <option value='Progresso'>Progresso</option>
+                                                <option value='Atendido'>Atendido</option>
+                                            </select>
+                                        </div>
 
-                                    <button className='btn-more' style={{ marginLeft: 10 }} onClick={loadChamadosFiltrados}>Filtrar</button>
-                                    <button className='btn-more' style={{ marginLeft: 10 }} onClick={handleClearFiltro}>Limpar filtro</button>
+                                        <button className='btn-more' style={{ marginLeft: 10 }} onClick={loadChamadosFiltrados}>Filtrar</button>
+                                        <button className='btn-more' style={{ marginLeft: 10 }} onClick={handleClearFiltro}>Limpar filtro</button>
+                                    </div>
                                 </div>
 
                             </div>
@@ -228,7 +230,7 @@ export default function Dashboard() {
                                                 <td data-label='Cliente'>{item.cliente}</td>
                                                 <td data-label='Assunto'>{item.assunto}</td>
                                                 <td data-label='Status'>
-                                                    <span className='badge' style={{ backgroundColor: getBackgroundColor(item.status)}}>
+                                                    <span className='badge' style={{ backgroundColor: getBackgroundColor(item.status) }}>
                                                         {item.status}
                                                     </span>
                                                 </td>

@@ -1,3 +1,22 @@
+/* Barra de rolagem para navegadores Webkit (Chrome, Safari) */
+::-webkit-scrollbar {
+  width: 13px; /* Largura da barra de rolagem */
+  height: 13px; /* Altura da barra de rolagem horizontal */
+}
+
+::-webkit-scrollbar-track {
+  background: #969595; /* Cor do fundo da barra de rolagem */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #515d91; /* Cor do polegar quando o cursor está sobre ele */
+}
+
+::-webkit-scrollbar-thumb {
+  background:  #181C2E; /* Cor do polegar da barra de rolagem */
+  border-radius: 4px; /* Raio das bordas do polegar */
+}
+
 /*Reset do CSS*/
 
 *{

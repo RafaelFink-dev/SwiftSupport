@@ -103,15 +103,31 @@ table td .badge{
 
 .filtros{
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
     margin-left: 0.8em;
 }
 
 .filtros label{
+    margin-top: 6px;
     margin-bottom: 4px;
     font-weight: 700;
 }
+
+.filtros-cb{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.container-filtros{
+    flex-direction: column;
+    background-color: #F8F8F8;
+    border-radius: 5px;
+    padding: 0.8em;
+    align-items: center;
+    margin-bottom: 1em;
+}
+
 
 @media screen and (max-width: 600px){
     table{
