@@ -97,9 +97,12 @@ function AuthProvider({ children }){
             navigate('/dashboard');
         })
         .catch((error) => {
-            console.log(error);
-            setLoadingAuth(false);
-            toast.error('Ops! algo deu errado!')
+
+            if (error.code === 'auth/invalid-credential'){
+                toast.error('Usuário e/ou senha invalido!')
+                setLoadingAuth(false);
+            }
+
         })
     }
 

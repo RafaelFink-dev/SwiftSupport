@@ -1,0 +1,13 @@
+
+.btn-editing{
+    display: flex;
+    flex-direction: column;
+}
+
+.btn-editing button{
+    margin-bottom: 10px;
+}
+
+.btn-cancel{
+    background-color: red;
+}

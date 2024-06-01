@@ -1,5 +1,4 @@
-import { AuthContext } from '../../contexts/auth';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import './dashboard.css';
 
 import Header from '../../components/Header';
@@ -14,6 +13,7 @@ import Modal from '../../components/Modal';
 const listRef = collection(db, 'tickets');
 
 export default function Dashboard() {
+
 
     const [chamados, setChamados] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -38,7 +38,9 @@ export default function Dashboard() {
 
         loadChamados();
 
-        return () => { } //quando desmontar o componente
+        return () => {
+
+        } //quando desmontar o componente
 
     }, [])
 
@@ -82,9 +84,9 @@ export default function Dashboard() {
         await updateState(querySnapshot);
     }
 
-    function toggleModal(item){
-       setShowModal(!showModal);
-       setDetail(item);
+    function toggleModal(item) {
+        setShowModal(!showModal);
+        setDetail(item);
     }
 
     if (loading) {
@@ -163,31 +165,33 @@ export default function Dashboard() {
                                                     </Link>
                                                 </td>
                                             </tr>
-                                        )
+                                )
                                     })}
 
-                                </tbody>
-                            </table>
+                            </tbody>
+                        </table>
 
 
-                            {loadingMore && <h3>Buscando mais chamados...</h3>}
-                            {!loadingMore && !isEmpty && <button onClick={handleMore} className='btn-more'>Buscar mais chamados</button>}
-                        </>
+                    {loadingMore && <h3>Buscando mais chamados...</h3>}
+                    {!loadingMore && !isEmpty && <button onClick={handleMore} className='btn-more'>Buscar mais chamados</button>}
+                </>
                     )}
 
 
-                </>
+            </>
 
-
-            </div>
-
-            {showModal && (
-                <Modal
-                    conteudo={detail}
-                    close={() => setShowModal(!showModal)}
-                />
-            )}
 
         </div>
+
+            {
+        showModal && (
+            <Modal
+                conteudo={detail}
+                close={() => setShowModal(!showModal)}
+            />
+        )
+    }
+
+        </div >
     )
 }
