@@ -136,6 +136,8 @@ export default function New() {
                 toast.success('Chamado registrado!')
                 setComplemento('');
                 setClienteSelect(0);
+                setStatus('Aberto')
+                setAssunto(0);
             })
             .catch((e) => {
                 console.log(e)

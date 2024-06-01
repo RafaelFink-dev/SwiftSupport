@@ -5,9 +5,10 @@ import Header from '../../components/Header';
 import Title from '../../components/Title';
 import { FiMessageSquare, FiPlus, FiSearch, FiEdit2 } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
-import { collection, getDocs, orderBy, limit, startAfter, query } from 'firebase/firestore';
+import { collection, getDocs, orderBy, limit, startAfter, query, where } from 'firebase/firestore';
 import { db } from '../../services/firebaseConnection';
 import { format } from 'date-fns';
+import { toast } from 'react-toastify';
 import Modal from '../../components/Modal';
 
 const listRef = collection(db, 'tickets');
@@ -23,6 +24,8 @@ export default function Dashboard() {
     const [loadingMore, setLoadingMore] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [detail, setDetail] = useState();
+    const [status, setStatus] = useState('Todos');
+    const [reset, setReset] = useState(false);
 
     useEffect(() => {
 
@@ -33,7 +36,7 @@ export default function Dashboard() {
             const querySnapshot = await getDocs(q)
             setChamados([]);
             await updateState(querySnapshot)
-            setLoading(false)
+            setLoading(false);
         }
 
         loadChamados();
@@ -42,7 +45,43 @@ export default function Dashboard() {
 
         } //quando desmontar o componente
 
-    }, [])
+    }, [reset])
+
+
+    async function loadChamadosFiltrados() {
+
+        if (status !== 'Todos') {
+            const q = query(listRef, where('status', '==', status), limit(5));
+
+            const querySnapshot = await getDocs(q)
+
+            if (querySnapshot.docs.length === 0){
+                toast.warn('Nenhum chamado encontrado com esse filtro!');
+                return;
+            }
+
+            setChamados([]);
+            await updateState(querySnapshot)
+            console.log(querySnapshot.docs)
+            return;
+        }
+
+        const q = query(listRef, orderBy('created', 'desc'), limit(5));
+
+        const querySnapshot = await getDocs(q)
+        setChamados([]);
+        await updateState(querySnapshot)
+        console.log(querySnapshot.docs)
+
+
+    }
+
+    function handleClearFiltro(){
+        setStatus('Todos');
+        setReset(!reset);
+        toast.success('Filtro resetado!');
+    }
+
 
     async function updateState(querySnapshot) {
         const isCollectionEmpty = querySnapshot.size === 0;
@@ -89,6 +128,11 @@ export default function Dashboard() {
         setDetail(item);
     }
 
+
+    function handleOptionChange(e) {
+        setStatus(e.target.value);
+    }
+
     if (loading) {
         return (
             <div>
@@ -127,10 +171,33 @@ export default function Dashboard() {
                         </div>
                     ) : (
                         <>
-                            <Link to='/new' className='new'>
-                                <FiPlus color='#FFF' size={25} />
-                                Novo chamado
-                            </Link>
+                            <div className='teste'>
+                                <div>
+                                    <Link to='/new' className='new'>
+                                        <FiPlus color='#FFF' size={25} />
+                                        Novo chamado
+                                    </Link>
+
+                                </div>
+
+                                <div className='container'>
+                                    <h3>FILTROS:</h3>
+
+                                    <div className='filtros'>
+                                        <label>Status</label>
+                                        <select value={status} onChange={handleOptionChange}>
+                                            <option value='Todos'>Todos</option>
+                                            <option value='Aberto'>Em Aberto</option>
+                                            <option value='Progresso'>Progresso</option>
+                                            <option value='Atendido'>Atendido</option>
+                                        </select>
+                                    </div>
+
+                                    <button className='btn-more' style={{ marginLeft: 10 }} onClick={loadChamadosFiltrados}>Filtrar</button>
+                                    <button className='btn-more' style={{ marginLeft: 10 }} onClick={handleClearFiltro}>Limpar filtro</button>
+                                </div>
+
+                            </div>
 
                             <table>
                                 <thead>
@@ -165,32 +232,32 @@ export default function Dashboard() {
                                                     </Link>
                                                 </td>
                                             </tr>
-                                )
+                                        )
                                     })}
 
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
 
 
-                    {loadingMore && <h3>Buscando mais chamados...</h3>}
-                    {!loadingMore && !isEmpty && <button onClick={handleMore} className='btn-more'>Buscar mais chamados</button>}
-                </>
+                            {loadingMore && <h3>Buscando mais chamados...</h3>}
+                            {!loadingMore && !isEmpty && <button onClick={handleMore} className='btn-more'>Buscar mais chamados</button>}
+                        </>
                     )}
 
 
-            </>
+                </>
 
 
-        </div>
+            </div>
 
             {
-        showModal && (
-            <Modal
-                conteudo={detail}
-                close={() => setShowModal(!showModal)}
-            />
-        )
-    }
+                showModal && (
+                    <Modal
+                        conteudo={detail}
+                        close={() => setShowModal(!showModal)}
+                    />
+                )
+            }
 
         </div >
     )
