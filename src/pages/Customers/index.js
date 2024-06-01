@@ -182,10 +182,11 @@ export default function Customers() {
 
                         <label>CNPJ</label>
                         <input
-                            type='text'
+                            type='number'
                             placeholder='Digite o CNPJ'
                             value={cnpj}
                             onChange={(e) => setCnpj(e.target.value)}
+                            maxLength={14}
                         />
 
                         <label>Endereço</label>

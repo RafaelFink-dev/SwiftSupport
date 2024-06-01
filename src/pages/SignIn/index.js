@@ -33,7 +33,7 @@ export default function SignIn() {
                 <form onSubmit={handleSignIn}>
                     <h1>ENTRAR</h1>
                     <input
-                        type='text'
+                        type='email'
                         placeholder='email@email.com'
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
