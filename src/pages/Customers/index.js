@@ -24,6 +24,16 @@ export default function Customers() {
     const [ativo, setAtivo] = useState('Ativo');
     const [idCustomer, setIdCustomer] = useState();
 
+    const getBackgroundColor = (ativo) => {
+        switch (ativo) {
+            case 'Ativo':
+                return '#5CB85C';
+            case 'Desativado':
+                return '#D9534F';
+
+        }
+    };
+
     function handleOptionChange(e) {
         setAtivo(e.target.value);
     }
@@ -252,7 +262,11 @@ export default function Customers() {
                                                     <td data-label='Cliente'>{item.nomeFantasia}</td>
                                                     <td data-label='Assunto'>{item.endereco}</td>
                                                     <td data-label='Cadastrado'>{item.cnpj}</td>
-                                                    <td data-label='Ativo'>{item.ativo}</td>
+                                                    <td data-label='Ativo'>
+                                                        <span className='badge' style={{ backgroundColor: getBackgroundColor(item.ativo) }}>
+                                                            {item.ativo}
+                                                        </span>
+                                                    </td>
                                                     <td data-label='#'>
                                                         <button className='action' style={{ backgroundColor: '#f6a935' }} onClick={() => handleEdit(item)}>
                                                             <FiEdit2 color='#FFF' size={17} />

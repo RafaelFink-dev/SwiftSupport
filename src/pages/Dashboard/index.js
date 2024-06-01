@@ -27,6 +27,17 @@ export default function Dashboard() {
     const [status, setStatus] = useState('Todos');
     const [reset, setReset] = useState(false);
 
+    const getBackgroundColor = (status) => {
+        switch (status) {
+          case 'Aberto':
+            return '#5CB85C';
+          case 'Progresso':
+            return '#D9534F';
+          case 'Atendido':
+            return '#999';
+        }
+      };
+
     useEffect(() => {
 
         async function loadChamados() {
@@ -217,7 +228,7 @@ export default function Dashboard() {
                                                 <td data-label='Cliente'>{item.cliente}</td>
                                                 <td data-label='Assunto'>{item.assunto}</td>
                                                 <td data-label='Status'>
-                                                    <span className='badge' style={{ backgroundColor: item.status === 'Aberto' ? '#5CB85C' : '#999' }}>
+                                                    <span className='badge' style={{ backgroundColor: getBackgroundColor(item.status)}}>
                                                         {item.status}
                                                     </span>
                                                 </td>
