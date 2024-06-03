@@ -82,7 +82,7 @@ export default function Dashboard() {
         const querySnapshot = await getDocs(q)
         setChamados([]);
         await updateState(querySnapshot)
-        console.log(querySnapshot.docs)
+        setIsEmpty(false);
 
 
     }
@@ -90,7 +90,9 @@ export default function Dashboard() {
     function handleClearFiltro() {
         setStatus('Todos');
         setReset(!reset);
+        setLoadingMore(false);
         toast.success('Filtro resetado!');
+        setIsEmpty(false);
     }
 
 
@@ -128,6 +130,16 @@ export default function Dashboard() {
 
     async function handleMore() {
         setLoadingMore(true);
+
+        if (status !== 'Todos') {
+
+            const q = query(listRef, where('status', '==', status),startAfter(lastDocs), limit(5));
+            //const q = query(listRef, orderBy('created', 'desc'), startAfter(lastDocs), limit(5));
+            const querySnapshot = await getDocs(q);
+            await updateState(querySnapshot);
+            return;
+
+        }
 
         const q = query(listRef, orderBy('created', 'desc'), startAfter(lastDocs), limit(5));
         const querySnapshot = await getDocs(q);
@@ -182,7 +194,7 @@ export default function Dashboard() {
                         </div>
                     ) : (
                         <>
-                            <div className='teste'>
+                            <div className='dv-filtros'>
                                 <div>
                                     <Link to='/new' className='new'>
                                         <FiPlus color='#FFF' size={25} />
