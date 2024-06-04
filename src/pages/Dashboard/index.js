@@ -1,19 +1,22 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import './dashboard.css';
 
 import Header from '../../components/Header';
 import Title from '../../components/Title';
 import { FiMessageSquare, FiPlus, FiSearch, FiEdit2 } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
-import { collection, getDocs, orderBy, limit, startAfter, query, where } from 'firebase/firestore';
+import { collection, getDocs, orderBy, limit, startAfter, query, where, and } from 'firebase/firestore';
 import { db } from '../../services/firebaseConnection';
 import { format } from 'date-fns';
 import { toast } from 'react-toastify';
 import Modal from '../../components/Modal';
+import { AuthContext } from '../../contexts/auth';
 
 const listRef = collection(db, 'tickets');
 
 export default function Dashboard() {
+
+    const { user } = useContext(AuthContext);
 
 
     const [chamados, setChamados] = useState([]);
@@ -42,7 +45,7 @@ export default function Dashboard() {
 
         async function loadChamados() {
 
-            const q = query(listRef, orderBy('created', 'desc'), limit(5));
+            const q = query(listRef, where('userId', '==', user.uid), limit(5));
 
             const querySnapshot = await getDocs(q)
             setChamados([]);
@@ -62,7 +65,7 @@ export default function Dashboard() {
     async function loadChamadosFiltrados() {
 
         if (status !== 'Todos') {
-            const q = query(listRef, where('status', '==', status), limit(5));
+            const q = query(listRef, where('status', '==', status), where('userId', '==', user.uid), limit(5));
 
             const querySnapshot = await getDocs(q)
 
@@ -77,7 +80,7 @@ export default function Dashboard() {
             return;
         }
 
-        const q = query(listRef, orderBy('created', 'desc'), limit(5));
+        const q = query(listRef, where('userId', '==', user.uid), limit(5));
 
         const querySnapshot = await getDocs(q)
         setChamados([]);
@@ -133,7 +136,7 @@ export default function Dashboard() {
 
         if (status !== 'Todos') {
 
-            const q = query(listRef, where('status', '==', status),startAfter(lastDocs), limit(5));
+            const q = query(listRef, where('status', '==', status), where('userId', '==', user.uid), startAfter(lastDocs), limit(5));
             //const q = query(listRef, orderBy('created', 'desc'), startAfter(lastDocs), limit(5));
             const querySnapshot = await getDocs(q);
             await updateState(querySnapshot);
@@ -141,7 +144,8 @@ export default function Dashboard() {
 
         }
 
-        const q = query(listRef, orderBy('created', 'desc'), startAfter(lastDocs), limit(5));
+        const q = query(listRef, where('userId', '==', user.uid), startAfter(lastDocs), limit(5));
+        //const q = query(listRef, orderBy('created', 'desc'), startAfter(lastDocs), limit(5));
         const querySnapshot = await getDocs(q);
         await updateState(querySnapshot);
     }

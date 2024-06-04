@@ -67,9 +67,23 @@ function AuthProvider({ children }){
 
         })
         .catch((error) =>{
-            console.log(error);
+
+            if (error.code === 'auth/weak-password'){
+                toast.warn('A senha deve ter no mínimo 6 digitos!')
+                console.log(error.code)
+                setLoadingAuth(false);
+            }
+
+            if (error.code === 'auth/email-already-in-use'){
+                toast.warn('E-mail já esta em uso!')
+                console.log(error.code)
+                setLoadingAuth(false);
+            }
+
             setLoadingAuth(false);
         })
+
+        //FirebaseError: Firebase: Password should be at least 6 characters (auth/weak-password).
 
     }
 
